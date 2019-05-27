@@ -53,10 +53,10 @@ internal class NotificationHelper (context: Context) : ContextWrapper(context) {
         val followersChannel = NotificationChannel(
                 FOLLOWERS_CHANNEL,
                 getString(R.string.notification_channel_followers),
-                NotificationManager.IMPORTANCE_DEFAULT)
+                NotificationManager.IMPORTANCE_HIGH)
 
         // Configure the channel's initial settings
-        followersChannel.lightColor = Color.GREEN
+        followersChannel.lightColor = Color.BLUE
         followersChannel.vibrationPattern = longArrayOf(100, 200, 300, 400, 500, 400, 500, 200, 500)
 
         // Submit the notification channel object to the notification manager
