@@ -54,6 +54,7 @@ internal class NotificationHelper(context: Context) : ContextWrapper(context) {
         // Configure the channel's initial settings
         followersChannel.lightColor = Color.BLUE
         followersChannel.vibrationPattern = longArrayOf(100, 200, 300, 400, 500, 400, 500, 200, 500)
+        followersChannel.setShowBadge(false)
 
         // Submit the notification channel object to the notification manager
         mNotificationManager.createNotificationChannel(followersChannel)
@@ -65,6 +66,7 @@ internal class NotificationHelper(context: Context) : ContextWrapper(context) {
 
         dmChannel.lightColor = Color.RED
         dmChannel.vibrationPattern = longArrayOf(100, 200, 300, 400, 500)
+        dmChannel.setShowBadge(true)
 
         mNotificationManager.createNotificationChannel(dmChannel)
 
