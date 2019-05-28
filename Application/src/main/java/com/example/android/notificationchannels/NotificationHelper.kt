@@ -16,28 +16,24 @@
 
 package com.example.android.notificationchannels
 
-import android.app.Notification
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
-import android.app.TaskStackBuilder
+import android.app.*
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.support.annotation.RequiresApi
-
-import java.util.Random
+import java.util.*
 
 /**
  * Helper class to manage notification channels, and create notifications.
  */
 @RequiresApi(Build.VERSION_CODES.O)
-internal class NotificationHelper (context: Context) : ContextWrapper(context) {
+internal class NotificationHelper(context: Context) : ContextWrapper(context) {
 
     companion object {
         val FOLLOWERS_CHANNEL = "follower"
+        val DM_CHANNEL = "dm"
     }
 
     private val mNotificationManager: NotificationManager by lazy {
@@ -49,7 +45,7 @@ internal class NotificationHelper (context: Context) : ContextWrapper(context) {
      */
     init {
 
-       // Create the channel object with the unique ID FOLLOWERS_CHANNEL
+        // Create the channel object with the unique ID FOLLOWERS_CHANNEL
         val followersChannel = NotificationChannel(
                 FOLLOWERS_CHANNEL,
                 getString(R.string.notification_channel_followers),
@@ -61,6 +57,16 @@ internal class NotificationHelper (context: Context) : ContextWrapper(context) {
 
         // Submit the notification channel object to the notification manager
         mNotificationManager.createNotificationChannel(followersChannel)
+
+        val dmChannel = NotificationChannel(
+                DM_CHANNEL,
+                getString(R.string.notification_channel_direct_message),
+                NotificationManager.IMPORTANCE_HIGH)
+
+        dmChannel.lightColor = Color.RED
+        dmChannel.vibrationPattern = longArrayOf(100, 200, 300, 400, 500)
+
+        mNotificationManager.createNotificationChannel(dmChannel)
 
     }
 
@@ -98,7 +104,7 @@ internal class NotificationHelper (context: Context) : ContextWrapper(context) {
      * @return A Notification.Builder configured with the selected channel and details
      */
     fun getNotificationDM(title: String, body: String): Notification.Builder {
-        return Notification.Builder(applicationContext, FOLLOWERS_CHANNEL)
+        return Notification.Builder(applicationContext, DM_CHANNEL)
                 .setContentTitle(title)
                 .setContentText(body)
                 .setSmallIcon(smallIcon)
@@ -112,11 +118,11 @@ internal class NotificationHelper (context: Context) : ContextWrapper(context) {
      * @return A PendingIntent that opens the MainActivity
      */
     private // The stack builder object will contain an artificial back stack for the
-            // started Activity.
-            // This ensures that navigating backward from the Activity leads out of
-            // your application to the Home screen.
-            // Adds the back stack for the Intent (but not the Intent itself)
-            // Adds the Intent that starts the Activity to the top of the stack
+    // started Activity.
+    // This ensures that navigating backward from the Activity leads out of
+    // your application to the Home screen.
+    // Adds the back stack for the Intent (but not the Intent itself)
+    // Adds the Intent that starts the Activity to the top of the stack
     val pendingIntent: PendingIntent
         get() {
             val openMainIntent = Intent(this, MainActivity::class.java)
